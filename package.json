@@ -1,0 +1,27 @@
+{
+  "name": "mima-admin-back",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.12"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ashabu/mima-admin-back.git"
+  },
+  "author": "Avtandil Shaburishvili",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ashabu/mima-admin-back/issues"
+  },
+  "homepage": "https://github.com/Ashabu/mima-admin-back#readme"
+}
