@@ -3,47 +3,35 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 
 
-const router = express.Router();
 
-const db = require('./database');
+
+const router = express.Router();
 
 const server = express();
 
+const faqController = require('./controllers/faqController');
+const testimonialController = require('./controllers/testimonialController');
+
+server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({ extended: true}));
 
 
-const connectDB = async () => {
-    try {
-        await db.authenticate();
-        console.log('Connection has been established successfully.');
-      } catch (error) {
-        console.error('Unable to connect to the database:', error);
-      }
-}
 
-connectDB();
-
-// server.use('/', (req, res, next) => {
-//   db.query('SELECT * FROM users')
-//   .then(function(dps) {
-//      console.log(dps)
-    
-//     return res.status(100).send("dps")
-    
-//   });
-//   res.end();
-// })
+server.get('/faqs', faqController.getFaqs);
+server.post('/addFaq', faqController.AddFaq);
+server.put('/editFaq/:id', faqController.UpdateFaq);
+server.delete('/deleteFaq/:id', faqController.DeleteFaq);
 
 
-server.get('/', (req, res, next) => {
+server.get('/testimonials', testimonialController.getTestimonials);
+server.post('/addTestimonial', testimonialController.AddTestimonial);
+server.put('/editTestimonial/:id', testimonialController.UpdateTestimonial);
+server.delete('/deleteTestimonial/:id', testimonialController.DeleteTestimonial);
 
-    db.query('SELECT * FROM users')
-  .then(function(dps) {
-     console.log(dps)
-    
-     res.status(200) .send(dps).header({"content-type":"application/json"})
-    
-  });
-   // res.status(200).send('<h1>Hello from Node</h1>')
-})
 
-server.listen(8080);
+
+const PORT = process.env.PORT || 8080;
+
+server.listen(PORT, () => {
+  console.log(`Server Listening On Port ${PORT}...`);
+});
