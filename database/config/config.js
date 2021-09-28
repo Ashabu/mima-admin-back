@@ -1,11 +1,17 @@
-const connectionString = {
-    DBname: 'MimaAdmin',
-    DBuserName: 'api',
-    DBpassword: 'traki123',
-    host: 'localhost',
+const dbConfig = {
+    DB: 'MimaAdmin',
+    USERNAME: 'api',
+    PASSWORD: 'traki123',
+    HOST: 'localhost',
     dialect: 'mssql',
-    DBinstansName: "SQLEXPRESS",
-    schema: 'dbo'
+    instanceName: "SQLEXPRESS",
+    schema: 'dbo',
+    pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+      }
 }
 
-module.exports = connectionString;
+module.exports = dbConfig;

@@ -5,7 +5,8 @@ module.exports = (sequelize, DataTypes) => {
         description: DataTypes.STRING,
         id: {
             type: DataTypes.NUMBER,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true
         }
     }, { schema: 'dbo' }
     );

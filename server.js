@@ -1,20 +1,23 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
-
-
+const cors = require("cors");
 
 
 const router = express.Router();
+const server = express((req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ a: 1 }));
+});
 
-const server = express();
 
+const db = require('./database/models/');
 const faqController = require('./controllers/faqController');
 const testimonialController = require('./controllers/testimonialController');
 
+server.use(cors());
 server.use(bodyParser.json());
-server.use(bodyParser.urlencoded({ extended: true}));
-
+server.use(bodyParser.urlencoded({ extended: true }));
 
 
 server.get('/faqs', faqController.getFaqs);
