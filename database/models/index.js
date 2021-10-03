@@ -2,12 +2,12 @@ const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 const dbConfig = require('./../config/config');
-let sequelize;
+// let sequelize;
 const basename = path.basename(__filename);
 const db = {};
 
 
-sequelize = new Sequelize(dbConfig.DB, dbConfig.USERNAME, dbConfig.PASSWORD, {
+let sequelize = new Sequelize(dbConfig.DB, dbConfig.USERNAME, dbConfig.PASSWORD, {
     host: dbConfig.HOST,
     dialect: dbConfig.dialect,
     dialectOptions: {

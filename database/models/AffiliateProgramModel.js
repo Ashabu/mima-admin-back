@@ -1,17 +1,16 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const faq = sequelize.define('Faqs', {
+    const AffiliateProgram = sequelize.define('AffiliateProgram', {
         title: DataTypes.STRING,
         description: DataTypes.STRING,
-        langKey: DataTypes.STRING,
-        itemKey: DataTypes.INTEGER,
+        imageUrl: DataTypes.STRING,
         id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.NUMBER,
             primaryKey: true,
             autoIncrement: true
         }
     }, { schema: 'dbo' }
     );
 
-    return faq;
+    return AffiliateProgram;
 };

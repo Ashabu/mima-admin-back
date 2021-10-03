@@ -1,8 +1,7 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const testimonial = sequelize.define('Testimonials', {
+    const benefit = sequelize.define('Benefits', {
         title: DataTypes.STRING,
-        description: DataTypes.STRING,
+        imageUrl: DataTypes.STRING,
         id: {
             type: DataTypes.NUMBER,
             primaryKey: true,
@@ -11,5 +10,5 @@ module.exports = (sequelize, DataTypes) => {
     }, { schema: 'dbo' }
     );
 
-    return testimonial;
+    return benefit;
 };
