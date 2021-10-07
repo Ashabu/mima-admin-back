@@ -75,8 +75,48 @@ const signIn = async (req, res, next) => {
 
 }
 
+const updateUser = async (req, res, next) => {
+    const { userName, password } = req.body;
+    try {
+        let user =  JSON.parse(JSON.stringify(await models.Users.findOne({ where: { userName } }))) ;
+      
+        if (!user) return res.status(200).json(serializer(200, null, false, { message: "Invalid Username or Password..." }));
+        console.log('user ------>', user)
+        let validPassword = await bcrypt.compare(password, user.password.trim());
+        if(!validPassword) return res.status(200).json(serializer(200, null, false, { message: "Invalid Username or Password..." }));
 
-module.exports = { singUp, signIn, getUsers }
+        const secretKey = process.env.SECRET_KEY;
+        const token = jwt.sign({ id: user.userId, name: user.name, surname: user.surname, userName: user.userName }, secretKey);
+        return res.status(200).json({ token })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json(error, { message: "Something Went Wrong" });
+    }
+
+}
+
+const deleteUser = async (req, res, next) => {
+    const { userName, password } = req.body;
+    try {
+        let user =  JSON.parse(JSON.stringify(await models.Users.findOne({ where: { userName } }))) ;
+      
+        if (!user) return res.status(200).json(serializer(200, null, false, { message: "Invalid Username or Password..." }));
+        console.log('user ------>', user)
+        let validPassword = await bcrypt.compare(password, user.password.trim());
+        if(!validPassword) return res.status(200).json(serializer(200, null, false, { message: "Invalid Username or Password..." }));
+
+        const secretKey = process.env.SECRET_KEY;
+        const token = jwt.sign({ id: user.userId, name: user.name, surname: user.surname, userName: user.userName }, secretKey);
+        return res.status(200).json({ token })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json(error, { message: "Something Went Wrong" });
+    }
+
+}
+
+
+module.exports = { singUp, signIn, getUsers, updateUser , deleteUser }
 
 
 

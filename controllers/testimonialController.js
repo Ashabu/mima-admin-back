@@ -1,11 +1,11 @@
 
-const models = require('./../database/models');
+const Testimonial = require('./../database/schemas/TestimonialSchema');
 const serializer = require('./../utils/serializer');
 
 
 const getTestimonials = async (req, res, next) => {
     try {
-        return await models.Testimonials.findAll()
+        Testimonial.find()
             .then(response => {
                 res.status(200).json(serializer(200, { testimonials: response }));
             })
@@ -24,7 +24,8 @@ const AddTestimonial = async (req, res, next) => {
         res.status(200).json(serializer(200, null, false, { message: "Title or Description shouldn't be empty!" }));
     } else {
         try {
-            return await models.Testimonials.create({ title, description })
+            const testimonial = new Testimonial({ title, description });
+            testimonial.save()
                 .then(response => {
                     return res.status(201).json(serializer(response))
                 })
@@ -43,9 +44,15 @@ const UpdateTestimonial = async (req, res, next) => {
     const { title, description } = req.body;
     if (!title || !description) {
         res.status(200).json(serializer(200, null, false, { message: "Title or Description shouldn't be empty!" }));
-    } else if (id > 0 && !isNaN(id)) {
+    } else if (id !== '') {
         try {
-            return await models.Testimonials.update({ title, description }, { where: { id } })
+            Testimonial.findById(id)
+                .then(t => {
+                    t.title = title;
+                    t.description = description;
+
+                    return t.save()
+                })
                 .then(response => {
                     if (response == 1) {
                         res.status(201).json(serializer(201, { message: 'Testimonial was updated successfully!' }));
@@ -67,9 +74,9 @@ const UpdateTestimonial = async (req, res, next) => {
 
 const DeleteTestimonial = async (req, res, next) => {
     const { id } = req.params;
-    if (id > 0 && !isNaN(id)) {
+    if (id !== '') {
         try {
-            return await models.Testimonials.destroy({ where: { id: id } })
+            Testimonial.findByIdAndRemove(id)
                 .then(response => {
                     if (response == 1) {
                         res.status(202).json(serializer(202, { message: 'Testimonial was deleted successfully!' }));

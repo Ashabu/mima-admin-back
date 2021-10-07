@@ -1,13 +1,13 @@
 
-const models = require('./../database/models');
+const Partner = require('../database/schemas/PartnerSchemas');
 const serializer = require('./../utils/serializer');
 
 
-const getPartners = async (req, res, next) => {
+const getPartners = async (req, res) => {
     try {
-        return await models.Partners.findAll()
+        Partner.find()
             .then(response => {
-                res.status(200).json(serializer(200, { partnerss: response }));
+                res.status(200).json(serializer(200, { partners: response }));
             })
             .catch(error => {
                 throw new (error)
@@ -18,13 +18,14 @@ const getPartners = async (req, res, next) => {
     };
 };
 
-const AddPartner = async (req, res, next) => {
-    const { name, linkUrl, imageUrl } = req.body;
+const AddPartner = async (req, res) => {
+    const { name, linkUrl, imgUrl } = req.body;
     if (!linkUrl || !imageUrl) {
         res.status(200).json(serializer(200, null, false, { message: "Link or Image shouldn't be empty!" }));
     } else {
         try {
-            return await models.Partners.create({ name, linkUrl, imageUrl })
+            const partner = new Partner({ name, linkUrl, imgUrl });
+            partner.save()
                 .then(response => {
                     return res.status(201).json(serializer(response))
                 })
@@ -40,14 +41,21 @@ const AddPartner = async (req, res, next) => {
 
 const UpdatePartner = async (req, res, next) => {
     const { id } = req.params;
-    const { name, linkUrl, imageUrl } = req.body;
-    if (!linkUrl || !imageUrl) {
+    const { name, linkUrl, imgUrl } = req.body;
+    if (!linkUrl || !imgUrl) {
         res.status(200).json(serializer(200, null, false, { message: "Link or Image shouldn't be empty!" }));
-    } else if (id > 0 && !isNaN(id)) {
+    } else if (id !== '') {
         try {
-            return await models.Partners.update({name, linkUrl, imageUrl }, { where: { id } })
+            Partner.findById(id)
+                .then(p => {
+                    p.name = name;
+                    p.linkUrl = linkUrl;
+                    p.imgUrl = imgUrl;
+
+                    return p.save();
+                })
                 .then(response => {
-                    if (response == 1) {
+                    if (response) {
                         res.status(201).json(serializer(201, { message: 'Partners was updated successfully!' }));
                     } else {
                         res.status(200).json(serializer(200, null, false, { message: `Cannot update Partners with id=${id}. Partners was not found!` }));
@@ -67,9 +75,9 @@ const UpdatePartner = async (req, res, next) => {
 
 const DeletePartner = async (req, res, next) => {
     const { id } = req.params;
-    if (id > 0 && !isNaN(id)) {
+    if (id !== '') {
         try {
-            return await models.Partners.destroy({ where: { id: id } })
+            Partner.findByIdAndRemove(id)
                 .then(response => {
                     if (response == 1) {
                         res.status(202).json(serializer(202, { message: 'Partners was deleted successfully!' }));

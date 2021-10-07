@@ -1,10 +1,11 @@
-const models = require('./../database/models');
+const Faq = require('./../database/schemas/FaqSchema');
 const serializer = require('./../utils/serializer');
 
 const getFaqs = async (req, res, next) => {
     try {
-        return await models.Faqs.findAll()
+        Faq.find()
             .then(response => {
+                console.log(response)
                 return res.status(200).json(serializer(200, { faqs: response }));
             })
             .catch(error => {
@@ -16,43 +17,45 @@ const getFaqs = async (req, res, next) => {
     };
 };
 
-const AddFaq = async (req, res, next) => {
-    console.log(req.body)
-    const { title, description, langKey = 'en' } = req.body;
+const AddFaq = async (req, res) => {
+    const { title, description } = req.body;
     if (!title || !description) {
         return res.status(200).json(serializer(200, null, false, { message: "Title or Description shouldn't be empty!" }));
     } else {
         try {
-            return await models.sequelize.query('select * from dbo.Faqs ORDER BY itemKey DESC').then(maxValue => {
-                let maxId = maxValue[0][maxValue[0].length - 1]?.itemKey;
-                
-                !maxId? 1 : maxId += 1;
-                return models.Faqs.create({ title, description, itemKey: maxId, langKey })
-                    .then(response => {
-                        return res.status(201).json(serializer(201, response))
-                    })
-                    .catch(error => {
-                        throw new Error(error);
-                    });
-            })
-
-
+            const faq = new Faq({ title, description });
+            faq.save()
+                .then(response => {
+                    return res.status(201).json(serializer(201, response))
+                })
+                .catch(error => {
+                    throw new Error(error);
+                });
         } catch (error) {
             return res.status(500).json(error, { message: "Something Went Wrong" });
         };
     };
 };
 
+
+// need to change
 const UpdateFaq = async (req, res, next) => {
     const id = req.params.id;
     const { title, description } = req.body;
     if (!title || !description) {
         res.status(200).json(serializer(200, null, false, { message: "Title or Description shouldn't be empty!" }));
-    } else if (id > 0 && !isNaN(id)) {
+    } else if (id !== '' ) {
         try {
-            return await models.Faqs.update({ title, description }, { where: { id } })
+           
+            Faq.findById(id)
+                .then(faq => {
+                     console.log('id', id, 'faq', faq)       
+                    faq.title = title;
+                    faq.description = description;
+                    return faq.save();
+                })
                 .then(response => {
-                    if (response == 1) {
+                    if (response) {
                         return res.status(201).json(serializer(201, { message: 'FAQ was updated successfully!' }));
                     } else {
                         return res.status(200).json(serializer(200, null, false, { message: `Cannot update FAQ with id=${id}. FAQ was not found!` }));
@@ -68,14 +71,16 @@ const UpdateFaq = async (req, res, next) => {
     };
 };
 
+
+// need to change
 const DeleteFaq = async (req, res, next) => {
     console.log('params.id----->', req.params.id)
     const id = req.params.id;
-    if (id > 0 && !isNaN(id)) {
+    if (id !=='') {
         try {
-            return await models.Faqs.destroy({ where: { id: id } })
+           Faq.findByIdAndRemove(id)    
                 .then(response => {
-                    if (response == 1) {
+                    if (response) {
                         return res.status(202).json(serializer(202, { message: 'FAQ was deleted successfully!' }));
                     } else {
                         console.log(response)

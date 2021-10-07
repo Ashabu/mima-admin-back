@@ -1,10 +1,10 @@
-const models = require('./../database/models');
+const Benefits = require('./../database/schemas/BenefitSchema');
 const serializer = require('./../utils/serializer');
 
 
 const getBenefits = async (req, res, next) => {
     try {
-        return await models.Benefits.findAll()
+        Benefits.find()
             .then(response => {
                 res.status(200).json(serializer(200, { benefits: response }));
             })
@@ -18,12 +18,13 @@ const getBenefits = async (req, res, next) => {
 };
 
 const AddBenefit = async (req, res, next) => {
-    const { title, imageUrl } = req.body;
-    if (!title || !imageUrl) {
+    const { title, imgUrl } = req.body;
+    if (!title || !imgUrl) {
         res.status(200).json(serializer(200, null, false, { message: "Title or Image shouldn't be empty!" }));
     } else {
         try {
-            return await models.Benefits.create({ title, imageUrl })
+            const benefit = new Benefits({ title, imgUrl });
+            benefit.save()
                 .then(response => {
                     return res.status(201).json(serializer(response))
                 })
@@ -39,14 +40,20 @@ const AddBenefit = async (req, res, next) => {
 
 const UpdateBenefit = async (req, res, next) => {
     const { id } = req.params;
-    const { title, imageUrl } = req.body;
-    if (!title || !imageUrl) {
+    const { title, imgUrl } = req.body;
+    if (!title || !imgUrl) {
         res.status(200).json(serializer(200, null, false, { message: "Title or Image  shouldn't be empty!" }));
-    } else if (id > 0 && !isNaN(id)) {
+    } else if (id !== '') {
         try {
-            return await models.Benefits.update({ title, imageUrl }, { where: { id } })
+            Benefits.findById(id)
+                .then(b => {
+                    b.title = title;
+                    b.imgUrl = imgUrl;
+
+                    return b.save()
+                })
                 .then(response => {
-                    if (response == 1) {
+                    if (response) {
                         res.status(201).json(serializer(201, { message: 'Benefit was updated successfully!' }));
                     } else {
                         res.status(200).json(serializer(200, null, false, { message: `Cannot update Benefit with id=${id}. Benefit was not found!` }));
@@ -66,11 +73,11 @@ const UpdateBenefit = async (req, res, next) => {
 
 const DeleteBenefit = async (req, res, next) => {
     const { id } = req.params;
-    if (id > 0 && !isNaN(id)) {
+    if (id !== '') {
         try {
-            return await models.Benefits.destroy({ where: { id: id } })
+            Benefits.findOneAndRemove(id)
                 .then(response => {
-                    if (response == 1) {
+                    if (response) {
                         res.status(202).json(serializer(202, { message: 'Benefit was deleted successfully!' }));
                     } else {
                         res.status(200).json(serializer(200, null, false, { message: `Cannot delete Benefit with id=${id}. Benefit was not found!` }));
