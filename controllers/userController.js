@@ -1,4 +1,4 @@
-const models = require('./../database/models');
+const User = require('./../database/schemas/UserSchema');
 const serializer = require('./../utils/serializer');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -8,7 +8,7 @@ const env = require('../.env');
 
 const getUsers = async (req, res, next) => {
     try {
-        return await models.Users.findAll()
+        User.find()
             .then(response => {
                 return res.status(200).json(serializer(200, { users: response }));
             })
@@ -25,28 +25,30 @@ const getUsers = async (req, res, next) => {
 const singUp = async (req, res, next) => {
     const { userName, password, name, surname } = req.body;
     try {
-        let user = await models.Users.findOne({ where: { userName } });
+        let user = User.findOne({'userName' : userName}, (err, result) => {
+            if(err) {
+                throw new Error(err);
+            } else {
+                return result;
+            }
+        });
+
+        console.log(' ================>', user)
         if (user) return res.status(200).json(serializer(200, null, false, { message: "User allready exists...." }));
         if (!userName || !password || !name || !surname) {
             return res.status(200).json(serializer(200, null, false, { message: "Fields shouldn't be empty!" }));
         } else {
-            user = {
-                userName,
-                password,
-                name,
-                surname,
-            }
-
+            const user = new User({userName, password, name, surname})
             user.password = await bcrypt.hash(user.password, 10);
-console.log(user.password.length)
-            return await models.Users.create({ ...user })
-                .then(res => {
-                    console.log('create user', res);
-                    next();
-                })
-                .catch(error => {
-                    throw new Error(error)
-                });
+
+            user.save()
+            .then(response => {
+                console.log('create user', response);
+                next();
+            })
+            .catch(error => {
+                throw new Error(error)
+            });
         };
     } catch (error) {
         console.log(error)
@@ -57,9 +59,16 @@ console.log(user.password.length)
 
 const signIn = async (req, res, next) => {
     const { userName, password } = req.body;
+
     try {
-        let user =  JSON.parse(JSON.stringify(await models.Users.findOne({ where: { userName } }))) ;
-      
+        let user =  User.findOne({userName}, (err, result) => {
+            if(err) {
+                throw new Error(err);
+            } else {
+                console.log(result)
+                return result;
+            }
+        });
         if (!user) return res.status(200).json(serializer(200, null, false, { message: "Invalid Username or Password..." }));
         console.log('user ------>', user)
         let validPassword = await bcrypt.compare(password, user.password.trim());
