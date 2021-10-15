@@ -4,13 +4,13 @@ const affiliateProgramController = require('../controllers/affiliateProgramContr
 
 const router = express.Router();
 
-router.get('/getPartners', affiliateProgramController.getAffiliatePrograms);
+router.get('/getMainInfo', affiliateProgramController.getAffiliatePrograms);
 
-router.post('/addPartner', affiliateProgramController.AddAffiliateProgram);
+router.post('/addMainInfo', affiliateProgramController.AddAffiliateProgram);
 
-router.put('/editPartner/:id', affiliateProgramController.UpdateAffiliateProgram);
+router.put('/editMainInfo/:id', affiliateProgramController.UpdateAffiliateProgram);
 
-router.delete('/deletePartner/:id', affiliateProgramController.DeleteAffiliateProgram);
+router.delete('/deleteMainInfo/:id', affiliateProgramController.DeleteAffiliateProgram);
 
 
 module.exports = router;

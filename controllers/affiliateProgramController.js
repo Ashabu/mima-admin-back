@@ -9,30 +9,47 @@ const getAffiliatePrograms = async (req, res, next) => {
                 res.status(200).json(serializer(200, { data: response }));
             })
             .catch(error => {
-                throw new (error)
+                next();
+                throw new Error(error)
             });
     } catch (error) {
-        console.log(error)
+        console.log(error);
         res.status(500).json(error, { message: "Something Went Wrong" });
     };
 };
 
 const AddAffiliateProgram = async (req, res, next) => {
-    const { title, description, imgUrl } = req.body;
-    if (!title || !description) {
+    const { title, subTitle, imgUrl } = req.body;
+    console.log(title, subTitle)
+    if (!title || !subTitle) {
         res.status(200).json(serializer(200, null, false, { message: "Title or Description shouldn't be empty!" }));
     } else {
         try {
-            const affiliateProgram = new AffiliateProgram({ title, description, imgUrl });
+            let newTitle = {
+                en: title.en || title.ru,
+                ru: title.ru || title.en,
+            };
+
+            let newSubTitle = {
+                en: subTitle.en || subTitle.ru,
+                ru: subTitle.ru || subTitle.en
+            };
+            
+            const affiliateProgram = new AffiliateProgram({ 
+                title: newTitle, 
+                subTitle: newSubTitle, 
+                imgUrl: imgUrl 
+            });
             affiliateProgram.save()
                 .then(response => {
                     return res.status(201).json(serializer(response))
                 })
                 .catch(error => {
-                    throw new (error)
+                    next();
+                    throw new Error(error)
                 });
         } catch (error) {
-            console.log(error)
+            console.log(error);
             res.status(500).json(error, { message: "Something Went Wrong" });
         };
     };
@@ -40,19 +57,21 @@ const AddAffiliateProgram = async (req, res, next) => {
 
 const UpdateAffiliateProgram = async (req, res, next) => {
     const { id } = req.params;
-    const { title, description, imgUrl } = req.body;
-    if (!title || !description) {
+    const { title, subTitle, imgUrl } = req.body;
+    if (!title || !subTitle) {
         res.status(200).json(serializer(200, null, false, { message: "Title or Description shouldn't be empty!" }));
     } else if (id !== '') {
         try {
             AffiliateProgram.findById(id)
                 .then(ap => {
                     ap.title = title;
-                    ap.description = description;
+                    ap.subTitle = subTitle;
                     ap.imgUrl = imgUrl;
 
                     return ap.save();
-
+                })
+                .cathc(error => {
+                    console.log(error);
                 })
                 .then(response => {
                     if (response) {
@@ -62,10 +81,11 @@ const UpdateAffiliateProgram = async (req, res, next) => {
                     };
                 })
                 .catch(error => {
-                    throw new (error)
+                    next();
+                    throw new Error(error)
                 });
         } catch (error) {
-            console.log(error)
+            console.log(error);
             res.status(500).json(error, { message: "Something Went Wrong" });
         };
     } else {
@@ -86,10 +106,11 @@ const DeleteAffiliateProgram = async (req, res, next) => {
                     };
                 })
                 .catch(error => {
+                    next();
                     throw new Error(error);
                 });
         } catch (error) {
-            console.log(error)
+            console.log(error);
             res.status(500).json(error, { message: "Could not delete AffiliateProgram with id=" + id });
         };
     } else {

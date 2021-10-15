@@ -9,30 +9,45 @@ const getBenefits = async (req, res, next) => {
                 res.status(200).json(serializer(200, { benefits: response }));
             })
             .catch(error => {
-                throw new (error)
+                next();
+                throw new Error(error)
             });
     } catch (error) {
-        console.log(error)
+        console.log(error);
         res.status(500).json(error, { message: "Something Went Wrong" });
     };
 };
 
 const AddBenefit = async (req, res, next) => {
-    const { title, imgUrl } = req.body;
-    if (!title || !imgUrl) {
+    const { description, imgUrl } = req.body;
+    console.log(description, imgUrl)
+    if (!description || !imgUrl) {
         res.status(200).json(serializer(200, null, false, { message: "Title or Image shouldn't be empty!" }));
     } else {
+        let newDescription = {
+            en: description.en,
+            ru: description.ru
+        };
+
+        if(!description.ru) {
+            newDescription.ru = description.en
+        };
+
         try {
-            const benefit = new Benefits({ title, imgUrl });
+            const benefit = new Benefits({ 
+                description: newDescription, 
+                imgUrl: imgUrl 
+            });
             benefit.save()
                 .then(response => {
                     return res.status(201).json(serializer(response))
                 })
                 .catch(error => {
-                    throw new (error)
+                    next();
+                    throw new Error(error)
                 });
         } catch (error) {
-            console.log(error)
+            console.log(error);
             res.status(500).json(error, { message: "Something Went Wrong" });
         };
     };
@@ -51,6 +66,8 @@ const UpdateBenefit = async (req, res, next) => {
                     b.imgUrl = imgUrl;
 
                     return b.save()
+                }).catch(error => {
+                    console.log(error);
                 })
                 .then(response => {
                     if (response) {
@@ -60,10 +77,11 @@ const UpdateBenefit = async (req, res, next) => {
                     };
                 })
                 .catch(error => {
-                    throw new (error)
+                    next();
+                    throw new Error(error)
                 });
         } catch (error) {
-            console.log(error)
+            console.log(error);
             res.status(500).json(error, { message: "Something Went Wrong" });
         };
     } else {
@@ -84,10 +102,11 @@ const DeleteBenefit = async (req, res, next) => {
                     };
                 })
                 .catch(error => {
+                    next();
                     throw new Error(error);
                 });
         } catch (error) {
-            console.log(error)
+            console.log(error);
             res.status(500).json(error, { message: "Could not delete Benefit with id=" + id });
         };
     } else {

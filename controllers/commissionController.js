@@ -9,30 +9,41 @@ const getCommissions = async (req, res, next) => {
                 res.status(200).json(serializer(200, { commissions: response }));
             })
             .catch(error => {
-                throw new (error)
+                next();
+                throw new Error(error)
             });
     } catch (error) {
-        console.log(error)
+        console.log(error);
         res.status(500).json(error, { message: "Something Went Wrong" });
     };
 };
 
 const AddCommission = async (req, res) => {
-    const { title, description, revenue, imgUrl } = req.body;
-    if (!title || !description) {
-        res.status(200).json(serializer(200, null, false, { message: "Title or Description shouldn't be empty!" }));
+    const { description, revenue, imgUrl } = req.body;
+    if (!description) {
+        res.status(200).json(serializer(200, null, false, { message: "Description shouldn't be empty!" }));
     } else {
         try {
-            const commission = new Commission({ title, description, revenue, imgUrl });
+            let newDescription = {
+                en: description.en || description.ru,
+                ru: description.ru || description.en
+            };
+
+            const commission = new Commission({
+                description: newDescription,
+                revenue: revenue,
+                imgUrl: imgUrl
+            });
             commission.save()
                 .then(response => {
                     return res.status(201).json(serializer(response))
                 })
                 .catch(error => {
-                    throw new (error)
+                    next();
+                    throw new Error(error)
                 });
         } catch (error) {
-            console.log(error)
+            console.log(error);
             res.status(500).json(error, { message: "Something Went Wrong" });
         };
     };
@@ -40,19 +51,21 @@ const AddCommission = async (req, res) => {
 
 const UpdateCommission = async (req, res, next) => {
     const { id } = req.params;
-    const { title, description, revenue, imgUrl } = req.body;
-    if (!title || !description) {
+    const { description, revenue, imgUrl } = req.body;
+    if (!description) {
         res.status(200).json(serializer(200, null, false, { message: "Title or Description shouldn't be empty!" }));
     } else if (id !== '') {
         try {
-            Commission.findOne(id)
+            Commission.findById(id)
                 .then(c => {
-                    c.title = title,
-                        c.description = description;
+                    c.description = description;
                     c.revenue = revenue;
                     c.imgUrl = imgUrl;
 
                     return c.save();
+                })
+                .catch(error => {
+                    console.log(error);
                 })
                 .then(response => {
                     if (response) {
@@ -62,10 +75,11 @@ const UpdateCommission = async (req, res, next) => {
                     };
                 })
                 .catch(error => {
-                    throw new (error)
+                    next();
+                    throw new Error(error)
                 });
         } catch (error) {
-            console.log(error)
+            console.log(error);
             res.status(500).json(error, { message: "Something Went Wrong" });
         };
     } else {
@@ -75,7 +89,7 @@ const UpdateCommission = async (req, res, next) => {
 
 const DeleteCommission = async (req, res, next) => {
     const { id } = req.params;
-    if (id > 0 && !isNaN(id)) {
+    if (id !== '') {
         try {
             Commission.findByIdAndRemove(id)
                 .then(response => {
@@ -86,10 +100,11 @@ const DeleteCommission = async (req, res, next) => {
                     };
                 })
                 .catch(error => {
+                    next();
                     throw new Error(error);
                 });
         } catch (error) {
-            console.log(error)
+            console.log(error);
             res.status(500).json(error, { message: "Could not delete Commission with id=" + id });
         };
     } else {

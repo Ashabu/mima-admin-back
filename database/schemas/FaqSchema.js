@@ -4,24 +4,20 @@ const Schema = mongoose.Schema
 const FaqSchema = new Schema({
     
     title: {
-        ka: {
+        en: {
             type: String,
-            required: true
         },
         ru: {
             type: String,
-            required: true
         },
         
     },
     description: {
-        ka: {
+        en: {
             type: String,
-            required: true
         },
         ru: {
             type: String,
-            required: true
         },
     }
 });

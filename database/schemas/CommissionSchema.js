@@ -5,17 +5,15 @@ const Schema = mongoose.Schema
 const CommissionSchema = new Schema({
     description: {
         type: Object,
-        ka: {
+        en: {
             type: String
         },
         ru: {
             type: String,
         },
-        required: true
     },
     imgUrl: {
         type: String,
-        required: true
     },
     revenue: {
         type: String

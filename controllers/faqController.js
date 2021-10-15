@@ -9,10 +9,11 @@ const getFaqs = async (req, res, next) => {
                 return res.status(200).json(serializer(200, { faqs: response }));
             })
             .catch(error => {
+                next();
                 throw new Error(error);
             });
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return res.status(500).json(error, { message: "Something Went Wrong" });
     };
 };
@@ -23,12 +24,26 @@ const AddFaq = async (req, res) => {
         return res.status(200).json(serializer(200, null, false, { message: "Title or Description shouldn't be empty!" }));
     } else {
         try {
-            const faq = new Faq({ title, description });
+            let newTitle = {
+                en: title.en || title.ru,
+                ru: title.ru || title.en,
+            };
+
+            let newDescription = {
+                en: description.en || description.ru,
+                ru: description.ru || description.en
+            };
+
+            const faq = new Faq({ 
+                title: newTitle, 
+                description: newDescription  
+            });
             faq.save()
                 .then(response => {
                     return res.status(201).json(serializer(201, response))
                 })
                 .catch(error => {
+                    next();
                     throw new Error(error);
                 });
         } catch (error) {
@@ -38,7 +53,6 @@ const AddFaq = async (req, res) => {
 };
 
 
-// need to change
 const UpdateFaq = async (req, res, next) => {
     const id = req.params.id;
     const { title, description } = req.body;
@@ -47,20 +61,26 @@ const UpdateFaq = async (req, res, next) => {
     } else if (id !== '' ) {
         try {
            
+
             Faq.findById(id)
                 .then(faq => {
-                     console.log('id', id, 'faq', faq)       
                     faq.title = title;
                     faq.description = description;
                     return faq.save();
                 })
+                .catch(error => {
+                    console.log(error);
+                })
                 .then(response => {
+                    console.log('response ====>', response)
                     if (response) {
                         return res.status(201).json(serializer(201, { message: 'FAQ was updated successfully!' }));
                     } else {
                         return res.status(200).json(serializer(200, null, false, { message: `Cannot update FAQ with id=${id}. FAQ was not found!` }));
                     };
                 }).cathc(error => {
+                    console.log(error);
+                    next();
                     throw new Error(error);
                 });
         } catch (error) {
@@ -72,9 +92,7 @@ const UpdateFaq = async (req, res, next) => {
 };
 
 
-// need to change
 const DeleteFaq = async (req, res, next) => {
-    console.log('params.id----->', req.params.id)
     const id = req.params.id;
     if (id !=='') {
         try {
@@ -88,6 +106,7 @@ const DeleteFaq = async (req, res, next) => {
                     };
                 })
                 .catch(error => {
+                    next();
                     throw new Error(error);
                 });
         } catch (error) {

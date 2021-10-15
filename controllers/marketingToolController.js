@@ -1,13 +1,13 @@
 
-const Testimonial = require('./../database/schemas/TestimonialSchema');
-const serializer = require('./../utils/serializer');
+const MarketingTool = require('./../database/schemas/MarketingToolSchema');
+const serializer = require('../utils/serializer');
 
 
-const getTestimonials = async (req, res, next) => {
+const GetMarketingTools = async (req, res, next) => {
     try {
-        Testimonial.find()
+        MarketingTool.find()
             .then(response => {
-                res.status(200).json(serializer(200, { testimonials: response }));
+                res.status(200).json(serializer(200, { tools: response }));
             })
             .catch(error => {
                 next();
@@ -19,8 +19,8 @@ const getTestimonials = async (req, res, next) => {
     };
 };
 
-const AddTestimonial = async (req, res, next) => {
-    const { title, description } = req.body;
+const AddMarketingTool = async (req, res, next) => {
+    const { title, description, imgUrl } = req.body;
     if (!title || !description) {
         res.status(200).json(serializer(200, null, false, { message: "Title or Description shouldn't be empty!" }));
     } else {
@@ -34,20 +34,20 @@ const AddTestimonial = async (req, res, next) => {
                 en: description.en || description.ru,
                 ru: description.ru || description.en
             };
- 
-            const testimonial = new Testimonial({ 
-                title: newTitle, 
-                description: newDescription
+
+            const marketingTool = new MarketingTool({
+                title: newTitle,
+                description: newDescription,
+                imgUrl: imgUrl
             });
 
-            testimonial.save()
+            marketingTool.save()
                 .then(response => {
                     return res.status(201).json(serializer(response))
                 })
                 .catch(error => {
                     next();
-                    throw new Error(error);
-                    
+                    throw new Error(error)
                 });
         } catch (error) {
             console.log(error);
@@ -56,25 +56,31 @@ const AddTestimonial = async (req, res, next) => {
     };
 };
 
-const UpdateTestimonial = async (req, res, next) => {
+const UpdateMarketingTool = async (req, res, next) => {
     const { id } = req.params;
-    const { title, description } = req.body;
+    const { title, description, imgUrl } = req.body;
     if (!title || !description) {
         res.status(200).json(serializer(200, null, false, { message: "Title or Description shouldn't be empty!" }));
     } else if (id !== '') {
         try {
-            Testimonial.findById(id)
+            MarketingTool.findById(id)
                 .then(t => {
                     t.title = title;
                     t.description = description;
+                    if (imgUrl) {
+                        t.imgUrl = imgUrl
+                    };
 
-                    return t.save()
+                    return t.save();
+                })
+                .catch(error => {
+                    console.log(error);
                 })
                 .then(response => {
                     if (response == 1) {
-                        res.status(201).json(serializer(201, { message: 'Testimonial was updated successfully!' }));
+                        res.status(201).json(serializer(201, { message: 'MarketingTool was updated successfully!' }));
                     } else {
-                        res.status(200).json(serializer(200, null, false, { message: `Cannot update Testimonial with id=${id}. Testimonial was not found!` }));
+                        res.status(200).json(serializer(200, null, false, { message: `Cannot update MarketingTool with id=${id}. MarketingTool was not found!` }));
                     };
                 })
                 .catch(error => {
@@ -90,16 +96,16 @@ const UpdateTestimonial = async (req, res, next) => {
     };
 };
 
-const DeleteTestimonial = async (req, res, next) => {
+const DeleteMarketingTool = async (req, res, next) => {
     const { id } = req.params;
     if (id !== '') {
         try {
-            Testimonial.findByIdAndRemove(id)
+            MarketingTool.findByIdAndRemove(id)
                 .then(response => {
-                    if (response == 1) {
-                        res.status(202).json(serializer(202, { message: 'Testimonial was deleted successfully!' }));
+                    if (response) {
+                        res.status(202).json(serializer(202, { message: 'MarketingTool was deleted successfully!' }));
                     } else {
-                        res.status(200).json(serializer(200, null, false, { message: `Cannot delete Testimonial with id=${id}. Testimonial was not found!` }));
+                        res.status(200).json(serializer(200, null, false, { message: `Cannot delete MarketingTool with id=${id}. MarketingTool was not found!` }));
                     };
                 })
                 .catch(error => {
@@ -108,7 +114,7 @@ const DeleteTestimonial = async (req, res, next) => {
                 });
         } catch (error) {
             console.log(error);
-            res.status(500).json(error, { message: "Could not delete Testimonial with id=" + id });
+            res.status(500).json(error, { message: "Could not delete MarketingTool with id=" + id });
         };
     } else {
         next();
@@ -116,4 +122,4 @@ const DeleteTestimonial = async (req, res, next) => {
 };
 
 
-module.exports = { getTestimonials, AddTestimonial, DeleteTestimonial, UpdateTestimonial }
+module.exports = { GetMarketingTools, AddMarketingTool, DeleteMarketingTool, UpdateMarketingTool }

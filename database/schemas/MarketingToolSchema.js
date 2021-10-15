@@ -5,7 +5,7 @@ const Schema = mongoose.Schema
 const MarketingToolSchema = new Schema({
     title: {
         type: Object,
-        ka: {
+        en: {
             type: String
         },
         ru: {
@@ -15,7 +15,7 @@ const MarketingToolSchema = new Schema({
     },
     description: {
         type: Object,
-        ka: {
+        en: {
             type: String
         },
         ru: {

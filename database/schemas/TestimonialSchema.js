@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const testimonialSchema = new Schema({
     title: {
-        ka: {
+        en: {
             type: String,
             required: true,
         },
@@ -15,7 +15,7 @@ const testimonialSchema = new Schema({
     },
 
     description: {
-        ka: {
+        en: {
             type: String,
             required: true,
         },

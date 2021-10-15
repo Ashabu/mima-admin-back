@@ -5,7 +5,7 @@ const Schema = mongoose.Schema
 const BenefitSchema = new Schema({
     description: {
         type: Object,
-        ka: {
+        en: {
             type: String
         },
         ru: {

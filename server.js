@@ -11,12 +11,13 @@ server.use(cors({ origin: true, credentials: true }));
 
 
 const faqRouts = require('./routes/faqRouts');
-const bennefitRouts = require('./routes/commissionRouts');
+const bennefitRouts = require('./routes/benefitsRouts');
 const commissionRouts = require('./routes/commissionRouts');
 const testimonialRoutes = require('./routes/testimonialRoutes');
 const partnerRoutes = require('./routes/partnerRouts');
 const userRouters = require('./routes/userRoutes');
 const affiliateRoutes = require('./routes/affiliateRoutes');
+const marketingToolRoutes = require('./routes/marketinToolsRoutes');
 
 
 
@@ -42,6 +43,8 @@ server.use(userRouters);
 
 server.use(affiliateRoutes);
 
+server.use(marketingToolRoutes);
+
 
 
 
@@ -56,5 +59,5 @@ mongoose
     });
   })
   .catch(error => {
-    console.log(error)
+    console.log(error);
   });
