@@ -96,7 +96,7 @@ const DeleteTestimonial = async (req, res, next) => {
         try {
             Testimonial.findByIdAndRemove(id)
                 .then(response => {
-                    if (response == 1) {
+                    if (response) {
                         res.status(202).json(serializer(202, { message: 'Testimonial was deleted successfully!' }));
                     } else {
                         res.status(200).json(serializer(200, null, false, { message: `Cannot delete Testimonial with id=${id}. Testimonial was not found!` }));

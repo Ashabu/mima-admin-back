@@ -77,7 +77,7 @@ const UpdateMarketingTool = async (req, res, next) => {
                     console.log(error);
                 })
                 .then(response => {
-                    if (response == 1) {
+                    if (response) {
                         res.status(201).json(serializer(201, { message: 'MarketingTool was updated successfully!' }));
                     } else {
                         res.status(200).json(serializer(200, null, false, { message: `Cannot update MarketingTool with id=${id}. MarketingTool was not found!` }));

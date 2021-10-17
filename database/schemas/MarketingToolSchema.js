@@ -25,7 +25,6 @@ const MarketingToolSchema = new Schema({
     },
     imgUrl: {
         type: String,
-        required: true
     }
 });
 

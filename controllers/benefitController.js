@@ -25,12 +25,8 @@ const AddBenefit = async (req, res, next) => {
         res.status(200).json(serializer(200, null, false, { message: "Title or Image shouldn't be empty!" }));
     } else {
         let newDescription = {
-            en: description.en,
-            ru: description.ru
-        };
-
-        if(!description.ru) {
-            newDescription.ru = description.en
+            en: description.en || description.ru,
+            ru: description.ru || description.en
         };
 
         try {

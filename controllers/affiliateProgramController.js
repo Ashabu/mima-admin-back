@@ -22,7 +22,7 @@ const AddAffiliateProgram = async (req, res, next) => {
     const { title, subTitle, imgUrl } = req.body;
     console.log(title, subTitle)
     if (!title || !subTitle) {
-        res.status(200).json(serializer(200, null, false, { message: "Title or Description shouldn't be empty!" }));
+        res.status(200).json(serializer(200, null, false, { message: "Title or Subtitle shouldn't be empty!" }));
     } else {
         try {
             let newTitle = {
