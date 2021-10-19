@@ -48,7 +48,7 @@ const singUp = async (req, res, next) => {
             user.save()
                 .then(response => {
                     console.log('create user', response);
-                    next();
+                    res.status(201).json(serializer(201, {response, message: "User Created Successfully" }));
                 })
                 .catch(error => {
                     next();

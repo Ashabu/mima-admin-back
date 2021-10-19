@@ -7,7 +7,7 @@ const getAffiliatePrograms = async (req, res, next) => {
     try {
         AffiliateProgram.find()
             .then(response => {
-                res.status(200).json(serializer(200, { data: response }));
+                res.status(200).json(serializer(200, { affiliates: response }, true));
             })
             .catch(error => {
                 next();
