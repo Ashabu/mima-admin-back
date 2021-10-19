@@ -19,7 +19,7 @@ const partnerRoutes = require('./routes/partnerRouts');
 const userRouters = require('./routes/userRoutes');
 const affiliateRoutes = require('./routes/affiliateRoutes');
 const marketingToolRoutes = require('./routes/marketinToolsRoutes');
-const pictureRoutes = require('./routes/pictureRoutes');
+const skypeLinkRoutes = require('./routes/skypeLinkRoutes');
 
 
 
@@ -47,7 +47,7 @@ server.use(affiliateRoutes);
 
 server.use(marketingToolRoutes);
 
-server.use(pictureRoutes);
+server.use(skypeLinkRoutes);
 
 
 
