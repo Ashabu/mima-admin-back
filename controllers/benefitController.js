@@ -22,7 +22,7 @@ const AddBenefit = async (req, res, next) => {
     const { description, imgUrl } = req.body;
     console.log(description, imgUrl)
     if (!description || !imgUrl) {
-        res.status(200).json(serializer(200, null, false, { message: "Title or Image shouldn't be empty!" }));
+        res.status(200).json(serializer(200, null, false, { message: "Description or Image shouldn't be empty!" }));
     } else {
         let newDescription = {
             en: description.en || description.ru,
@@ -51,14 +51,14 @@ const AddBenefit = async (req, res, next) => {
 
 const UpdateBenefit = async (req, res, next) => {
     const { id } = req.params;
-    const { title, imgUrl } = req.body;
-    if (!title || !imgUrl) {
-        res.status(200).json(serializer(200, null, false, { message: "Title or Image  shouldn't be empty!" }));
+    const { description, imgUrl } = req.body;
+    if (!description || !imgUrl) {
+        res.status(200).json(serializer(200, null, false, { message: "Description or Image  shouldn't be empty!" }));
     } else if (id !== '') {
         try {
             Benefits.findById(id)
                 .then(b => {
-                    b.title = title;
+                    b.description = description;
                     b.imgUrl = imgUrl;
 
                     return b.save()
@@ -67,6 +67,7 @@ const UpdateBenefit = async (req, res, next) => {
                 })
                 .then(response => {
                     if (response) {
+                        
                         res.status(201).json(serializer(201, { message: 'Benefit was updated successfully!' }));
                     } else {
                         res.status(200).json(serializer(200, null, false, { message: `Cannot update Benefit with id=${id}. Benefit was not found!` }));
@@ -89,7 +90,7 @@ const DeleteBenefit = async (req, res, next) => {
     const { id } = req.params;
     if (id !== '') {
         try {
-            Benefits.findOneAndRemove(id)
+            Benefits.findByIdAndRemove(id)
                 .then(response => {
                     if (response) {
                         res.status(202).json(serializer(202, { message: 'Benefit was deleted successfully!' }));

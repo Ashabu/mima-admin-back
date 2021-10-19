@@ -12,5 +12,9 @@ router.put('/editMainInfo/:id', affiliateProgramController.UpdateAffiliateProgra
 
 router.delete('/deleteMainInfo/:id', affiliateProgramController.DeleteAffiliateProgram);
 
+router.post('/mainInfo/addPicture', affiliateProgramController.AddPicture);
+
+router.put('/mainInfo/deletePicture/:id', affiliateProgramController.DeletePicture);
+
 
 module.exports = router;

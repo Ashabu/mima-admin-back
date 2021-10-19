@@ -64,7 +64,7 @@ const singUp = async (req, res, next) => {
 const signIn = async (req, res) => {
     let loadedUser;
     const { userName, password } = req.body;
-
+    console.log(userName, password);
     try {
         User.findOne({ userName: userName })
             .then(user => {

@@ -10,6 +10,7 @@ const server = express();
 server.use(cors({ origin: true, credentials: true }));
 
 
+
 const faqRouts = require('./routes/faqRouts');
 const bennefitRouts = require('./routes/benefitsRouts');
 const commissionRouts = require('./routes/commissionRouts');
@@ -18,6 +19,7 @@ const partnerRoutes = require('./routes/partnerRouts');
 const userRouters = require('./routes/userRoutes');
 const affiliateRoutes = require('./routes/affiliateRoutes');
 const marketingToolRoutes = require('./routes/marketinToolsRoutes');
+const pictureRoutes = require('./routes/pictureRoutes');
 
 
 
@@ -44,6 +46,9 @@ server.use(userRouters);
 server.use(affiliateRoutes);
 
 server.use(marketingToolRoutes);
+
+server.use(pictureRoutes);
+
 
 
 
