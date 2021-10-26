@@ -12,12 +12,11 @@ const CommissionSchema = new Schema({
             type: String,
         },
     },
+    amountRanges: [],
     imgUrl: {
         type: String,
     },
-    revenue: {
-        type: String
-    }
+    
 });
 
 module.exports = mongoose.model('Commission', CommissionSchema);
