@@ -1,20 +1,16 @@
 const express = require('express');
 
-const affiliateProgramController = require('../controllers/affiliateProgramController');
+const affiliateController = require('../controllers/affiliateController');
 
 const router = express.Router();
 
-router.get('/getMainInfo', affiliateProgramController.getAffiliatePrograms);
+router.get('/getAffiliate', affiliateController.GetAffiliate);
 
-router.post('/addMainInfo', affiliateProgramController.AddAffiliateProgram);
+router.post('/addAffiliate', affiliateController.AddAffiliate);
 
-router.put('/editMainInfo/:id', affiliateProgramController.UpdateAffiliateProgram);
+router.put('/editAffiliate/:id', affiliateController.UpdateAffiliate);
 
-router.delete('/deleteMainInfo/:id', affiliateProgramController.DeleteAffiliateProgram);
-
-router.post('/mainInfo/addPicture', affiliateProgramController.AddPicture);
-
-router.put('/mainInfo/deletePicture/:id', affiliateProgramController.DeletePicture);
+router.delete('/deleteAffiliate/:id', affiliateController.DeleteAffiliate);
 
 
 module.exports = router;

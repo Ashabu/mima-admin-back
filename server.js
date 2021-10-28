@@ -9,7 +9,7 @@ const server = express();
 
 server.use(cors({ origin: true, credentials: true }));
 
-
+const affiliateRoutes = require('./routes/affiliateRoutes');
 
 const faqRouts = require('./routes/faqRouts');
 const bennefitRouts = require('./routes/benefitsRouts');
@@ -17,10 +17,10 @@ const commissionRouts = require('./routes/commissionRouts');
 const testimonialRoutes = require('./routes/testimonialRoutes');
 const partnerRoutes = require('./routes/partnerRouts');
 const userRouters = require('./routes/userRoutes');
-const affiliateRoutes = require('./routes/affiliateRoutes');
 const marketingToolRoutes = require('./routes/marketinToolsRoutes');
 const skypeLinkRoutes = require('./routes/skypeLinkRoutes');
 const amountRangeroutes = require('./routes/amountRangeRoutes');
+const imageRoutes = require('./routes/imageRoutes');
 
 
 
@@ -31,6 +31,8 @@ const amountRangeroutes = require('./routes/amountRangeRoutes');
 server.use(bodyParser.json({ limit: '50mb' }));
 
 server.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
+server.use(affiliateRoutes)
 
 server.use(faqRouts);
 
@@ -44,13 +46,15 @@ server.use(partnerRoutes);
 
 server.use(userRouters);
 
-server.use(affiliateRoutes);
+
 
 server.use(marketingToolRoutes);
 
 server.use(skypeLinkRoutes);
 
 server.use(amountRangeroutes);
+
+server.use(imageRoutes);
 
 
 

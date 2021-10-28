@@ -5,7 +5,7 @@ const commissionController = require('../controllers/commissionController');
 const router = express.Router();
 
 
-router.get('/getCommisions',  commissionController.getCommissions);
+router.get('/getCommissions',  commissionController.getCommissions);
 
 router.post('/addCommission',  commissionController.AddCommission);
 

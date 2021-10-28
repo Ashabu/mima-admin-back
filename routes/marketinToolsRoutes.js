@@ -12,9 +12,6 @@ router.put('/editMarketingTool/:id', marketingToolController.UpdateMarketingTool
 
 router.delete('/deleteMarketingTool/:id', marketingToolController.DeleteMarketingTool);
 
-router.post('/marketing/addPicture', marketingToolController.AddPicture);
-
-router.put('/marketing/deletePicture/:id', marketingToolController.DeletePicture);
 
 
 module.exports = router;

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema
 
 
-const AffiliateProgramSchema = new Schema({
+const AffiliateSchema = new Schema({
     title: {
         
         en: {
@@ -21,7 +21,7 @@ const AffiliateProgramSchema = new Schema({
             type: String,
         },
     },
-    images: ['Picture']
+    images: []
 });
 
-module.exports = mongoose.model('AffiliateProgram', AffiliateProgramSchema);
+module.exports = mongoose.model('Affiliate', AffiliateSchema);

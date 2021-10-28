@@ -5,17 +5,12 @@ const AmountRange = require('./../database/schemas/amountRangeSchema');
 
 const getCommissions = async (req, res, next) => {
     try {
-        
+        let amountRanges = await AmountRange.find();
         Commission.find()
-            .then(async response => {
-                let commissions = response;
-                await AmountRange.find().then(resp => {
-                    
-                    commissions[0].amountRanges = [...resp]
-                    console.log('aqane========>',commissions[0].amountRanges)
-                    res.status(200).json(serializer(200, { commissions: commissions }));
-                })
-                
+            .then(response => {
+                response[0].amountRanges = [...amountRanges]
+                res.status(200).json(serializer(200, { commissions: response }));
+
             })
             .catch(error => {
                 next();

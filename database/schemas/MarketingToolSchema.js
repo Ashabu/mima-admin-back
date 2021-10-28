@@ -21,7 +21,6 @@ const MarketingToolSchema = new Schema({
             type: String,
         },
     },
-    images: ['Picture'],
 });
 
 module.exports = mongoose.model('MarketingTool', MarketingToolSchema);
