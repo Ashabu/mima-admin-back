@@ -21,7 +21,7 @@ const getTestimonials = async (req, res, next) => {
 
 const AddTestimonial = async (req, res, next) => {
     const { title, description } = req.body;
-    if (!title || !description) {
+    if (!description) {
         res.status(200).json(serializer(200, null, false, { message: "Title or Description shouldn't be empty!" }));
     } else {
         try {
@@ -34,9 +34,9 @@ const AddTestimonial = async (req, res, next) => {
                 en: description.en || description.ru,
                 ru: description.ru || description.en
             };
- 
-            const testimonial = new Testimonial({ 
-                title: newTitle, 
+
+            const testimonial = new Testimonial({
+                title: newTitle,
                 description: newDescription
             });
 
@@ -47,7 +47,7 @@ const AddTestimonial = async (req, res, next) => {
                 .catch(error => {
                     next();
                     throw new Error(error);
-                    
+
                 });
         } catch (error) {
             console.log(error);
@@ -68,10 +68,10 @@ const UpdateTestimonial = async (req, res, next) => {
                     t.title = title;
                     t.description = description;
 
-                    return t.save()
+                    return t.save();
                 })
                 .then(response => {
-                    if (response == 1) {
+                    if (response) {
                         res.status(201).json(serializer(201, { message: 'Testimonial was updated successfully!' }));
                     } else {
                         res.status(200).json(serializer(200, null, false, { message: `Cannot update Testimonial with id=${id}. Testimonial was not found!` }));

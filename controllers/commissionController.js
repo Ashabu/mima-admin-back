@@ -3,7 +3,8 @@ const serializer = require('./../utils/serializer');
 const AmountRange = require('./../database/schemas/amountRangeSchema');
 
 
-const getCommissions = async (req, res, next) => {
+const GetCommissions = async (req, res, next) => {
+    console.log('getCommissions')
     try {
         let amountRanges = await AmountRange.find();
         Commission.find()
@@ -117,4 +118,4 @@ const DeleteCommission = async (req, res, next) => {
 };
 
 
-module.exports = { getCommissions, AddCommission, DeleteCommission, UpdateCommission }
+module.exports = { GetCommissions, AddCommission, DeleteCommission, UpdateCommission }

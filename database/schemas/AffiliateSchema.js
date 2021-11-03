@@ -21,7 +21,6 @@ const AffiliateSchema = new Schema({
             type: String,
         },
     },
-    images: []
 });
 
 module.exports = mongoose.model('Affiliate', AffiliateSchema);

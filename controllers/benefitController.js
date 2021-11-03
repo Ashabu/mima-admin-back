@@ -30,9 +30,9 @@ const AddBenefit = async (req, res, next) => {
         };
 
         try {
-            const benefit = new Benefits({ 
-                description: newDescription, 
-                imgUrl: imgUrl 
+            const benefit = new Benefits({
+                description: newDescription,
+                imgUrl: imgUrl
             });
             benefit.save()
                 .then(response => {
@@ -67,7 +67,7 @@ const UpdateBenefit = async (req, res, next) => {
                 })
                 .then(response => {
                     if (response) {
-                        
+
                         res.status(201).json(serializer(201, { message: 'Benefit was updated successfully!' }));
                     } else {
                         res.status(200).json(serializer(200, null, false, { message: `Cannot update Benefit with id=${id}. Benefit was not found!` }));

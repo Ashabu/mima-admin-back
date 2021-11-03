@@ -47,7 +47,7 @@ const UpdateSkypeLink = async (req, res, next) => {
     const { id } = req.params;
     const {linkUrl } = req.body;
     if (!linkUrl ) {
-        res.status(200).json(serializer(200, null, false, { message: "Link or Image shouldn't be empty!" }));
+        res.status(200).json(serializer(200, null, false, { message: "Link shouldn't be empty!" }));
     } else if (id !== '') {
         try {
             SkypeLink.findById(id)

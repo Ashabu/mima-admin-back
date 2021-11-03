@@ -6,12 +6,10 @@ const serializer = require('../utils/serializer');
 const GetAffiliate = async (req, res, next) => {
     try {
         let banners = await Image.find({ relatesTo: 'Affiliate' });
-        console.log(banners)
         await Affiliate.find()
             .then(response => {
                 console.log('Affiliate',response)
-                response[0].images = banners;
-                res.status(200).json(serializer(200, { affiliates: response }, true));
+                res.status(200).json(serializer(200, { affiliates: response, images: banners }, true));
             })
             .catch(error => {
                 next();

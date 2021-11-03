@@ -10,7 +10,6 @@ const server = express();
 server.use(cors({ origin: true, credentials: true }));
 
 const affiliateRoutes = require('./routes/affiliateRoutes');
-
 const faqRouts = require('./routes/faqRouts');
 const bennefitRouts = require('./routes/benefitsRouts');
 const commissionRouts = require('./routes/commissionRouts');
@@ -21,10 +20,6 @@ const marketingToolRoutes = require('./routes/marketinToolsRoutes');
 const skypeLinkRoutes = require('./routes/skypeLinkRoutes');
 const amountRangeroutes = require('./routes/amountRangeRoutes');
 const imageRoutes = require('./routes/imageRoutes');
-
-
-
-
 
 
 
@@ -46,8 +41,6 @@ server.use(partnerRoutes);
 
 server.use(userRouters);
 
-
-
 server.use(marketingToolRoutes);
 
 server.use(skypeLinkRoutes);
@@ -64,12 +57,15 @@ const uri = process.env.DB_CONNECTION_URI
 const PORT = process.env.PORT || 8080;
 
 mongoose
-  .connect(uri)
-  .then(result => {
-    server.listen(PORT, () => {
-      console.log( `Server Listening On Port ${PORT}...`);
-    });
-  })
-  .catch(error => {
-    console.log(error);
-  });
+ .connect(uri)
+ .then(result => {
+   server.listen(() => {
+     console.log( `Server Started...`);
+   });
+ })
+ .catch(error => {
+   console.log(error);
+ });
+
+// server.listen()
+
