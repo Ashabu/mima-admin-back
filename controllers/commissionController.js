@@ -24,7 +24,7 @@ const GetCommissions = async (req, res, next) => {
 };
 
 const AddCommission = async (req, res) => {
-    const { description, revenue, imgUrl } = req.body;
+    const { description, imgUrl } = req.body;
     if (!description) {
         res.status(200).json(serializer(200, null, false, { message: "Description shouldn't be empty!" }));
     } else {
@@ -36,7 +36,7 @@ const AddCommission = async (req, res) => {
 
             const commission = new Commission({
                 description: newDescription,
-                revenue: revenue,
+                
                 imgUrl: imgUrl
             });
             commission.save()

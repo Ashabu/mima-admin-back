@@ -20,7 +20,7 @@ const getTestimonials = async (req, res, next) => {
 };
 
 const AddTestimonial = async (req, res, next) => {
-    const { title, description } = req.body;
+    const { title, description, linkUrl } = req.body;
     if (!description) {
         res.status(200).json(serializer(200, null, false, { message: "Title or Description shouldn't be empty!" }));
     } else {
@@ -37,7 +37,8 @@ const AddTestimonial = async (req, res, next) => {
 
             const testimonial = new Testimonial({
                 title: newTitle,
-                description: newDescription
+                description: newDescription,
+                linkUrl: linkUrl
             });
 
             testimonial.save()
@@ -58,16 +59,14 @@ const AddTestimonial = async (req, res, next) => {
 
 const UpdateTestimonial = async (req, res, next) => {
     const { id } = req.params;
-    const { title, description } = req.body;
-    if (!title || !description) {
-        res.status(200).json(serializer(200, null, false, { message: "Title or Description shouldn't be empty!" }));
-    } else if (id !== '') {
+    const { title, description, linkUrl } = req.body;
+    if (id !== '') {
         try {
             Testimonial.findById(id)
                 .then(t => {
                     t.title = title;
                     t.description = description;
-
+                    t.linkUrl = linkUrl;
                     return t.save();
                 })
                 .then(response => {

@@ -6,22 +6,20 @@ const testimonialSchema = new Schema({
     title: {
         en: {
             type: String,
-            required: true,
         },
         ru : {
             type: String,
-            required: true,
         }
     },
-
+    linkUrl: {
+        type: String
+    },
     description: {
         en: {
             type: String,
-            required: true,
         },
         ru : {
             type: String,
-            required: true,
         }
     }
 });

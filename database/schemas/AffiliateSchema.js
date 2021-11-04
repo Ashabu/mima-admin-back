@@ -4,7 +4,6 @@ const Schema = mongoose.Schema
 
 const AffiliateSchema = new Schema({
     title: {
-        
         en: {
             type: String
         },
@@ -12,8 +11,9 @@ const AffiliateSchema = new Schema({
             type: String,
         },
     },
+    
     subTitle: {
-        
+
         en: {
             type: String
         },
@@ -21,6 +21,7 @@ const AffiliateSchema = new Schema({
             type: String,
         },
     },
+
 });
 
 module.exports = mongoose.model('Affiliate', AffiliateSchema);
